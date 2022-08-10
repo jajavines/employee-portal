@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\EmployeesController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -17,3 +18,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+// Employee CRUD
+Route::post('/employee', [EmployeesController::class, 'create']);
+Route::get('/employee/{employee}', [EmployeesController::class, 'read']);
+Route::patch('/employee/{employee}', [EmployeesController::class, 'update']);
+Route::delete('/employee/{employee}', [EmployeesController::class, 'delete']);
