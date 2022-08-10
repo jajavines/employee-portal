@@ -44,7 +44,11 @@ class EmployeesController extends Controller
         return request()->validate([
             'first_name' => 'required',
             'middle_name' => '',
-            'last_name' => 'required'
+            'last_name' => 'required',
+            'name_suffix' => '',
+            'employment_status' => '',
+            'date_hired' => '',
+            'date_resigned' => ''
         ]);
     }
 }
