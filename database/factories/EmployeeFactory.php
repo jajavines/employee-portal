@@ -23,7 +23,9 @@ class EmployeeFactory extends Factory
             'first_name' => $this->faker->firstName(),
             'middle_name' => $this->faker->lastName(),
             'last_name' => $this->faker->lastName(),
-            'date_hired' => now()
+            'name_suffix' => $this->faker->randomElement(['','Jr.','III']),
+            'employment_status' => 1,//$this->faker->numberBetween(0, 2),
+            'date_hired' => $this->faker->dateTimeThisDecade(now())
         ];
     }
 }

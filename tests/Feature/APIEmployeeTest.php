@@ -7,7 +7,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\Employee;
 
-class APIEmployeeTest extends TestCase
+class ApiEmployeeTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -34,10 +34,27 @@ class APIEmployeeTest extends TestCase
 
         $response->assertOk();
         $response->assertJsonStructure();
-        $this->assertIsString($response->decodeResponseJson()['first_name']);
+        $this->assertIsString($response->decodeResponseJson()['data']['firstName']);
+
+        $response = $this->get('/api/employee');
+        $response->assertOk();
+        $response->assertJsonStructure();
+        $this->assertCount(3, $response['data']);
     }
 
+    public function test_employee_can_be_read_and_filtered()
+    {
+        $this->withoutExceptionHandling();
 
+        Employee::factory()->count(10)->create();
+        $this->assertDatabaseCount('employees', 10);
+
+        $response = $this->get('/api/employee?status[eq]=ACTIVE');
+
+        $response->assertOk();
+        $response->assertJsonStructure();
+        $this->assertCount(Employee::where('employment_status', 1)->count(), $response['data']);
+    }
 
     public function test_employee_can_be_updated()
     {

@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\EmployeeCollection;
+use App\Http\Resources\EmployeeResource;
 use App\Models\Employee;
+use App\Services\ApiFilters\EmployeeApiFilterService;
 use Illuminate\Http\Request;
 
 class EmployeesController extends Controller
@@ -21,9 +24,26 @@ class EmployeesController extends Controller
         Employee::create($this->_validateRequest());        
     }
 
+    public function readAll()
+    {
+        $request = request();
+        $filter = new EmployeeApiFilterService();
+        $conditions = $filter->get_filter_conditions($request);
+        // dd($conditions);
+        // dd(Employee::where($conditions)->toSql());
+        $conditions = [
+            ['employment_status', '=', 1]
+        ];
+        if (count($conditions) > 0) {
+            return new EmployeeCollection(Employee::where($conditions)->paginate());
+        } else {
+            return new EmployeeCollection(Employee::paginate());
+        }
+    }
+
     public function read(Employee $employee)
     {
-        return $employee->toJson();
+        return new EmployeeResource($employee);
     }
 
     public function update(Employee $employee)
