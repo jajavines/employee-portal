@@ -20,7 +20,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 // Employee CRUD
-Route::post('/employee', [EmployeesController::class, 'create']);
-Route::get('/employee/{employee}', [EmployeesController::class, 'read']);
-Route::patch('/employee/{employee}', [EmployeesController::class, 'update']);
-Route::delete('/employee/{employee}', [EmployeesController::class, 'delete']);
+Route::group(['prefix' => 'employee'], function() {
+    Route::post('/', [EmployeesController::class, 'create']);
+    Route::get('/', [EmployeesController::class, 'readAll']);
+    Route::get('/{employee}', [EmployeesController::class, 'read']);
+    Route::patch('/{employee}', [EmployeesController::class, 'update']);
+    Route::delete('/{employee}', [EmployeesController::class, 'delete']);
+});
+
